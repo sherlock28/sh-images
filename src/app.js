@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-app.use(multer({ storage }).single("image"));
+app.use(multer({ storage }).any("images"));
 
 if (process.env.NODE_ENV === "development") {
   app.use(require("morgan")("dev"));
