@@ -3,7 +3,7 @@ const connection = require("../database/dbconnection");
 
 const deleteImage = async (req, res) => {
   try {
-    const { public_id } = req.params;
+    const { public_id } = req.body;
 
     const query = `DELETE FROM images WHERE public_id='${public_id}'`;
     await connection.query(query);
