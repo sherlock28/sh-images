@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { postImages, deleteImage } = require("../controllers");
 
-router.post("/image", postImages);
-router.delete("/image", deleteImage);
+router.post("/images", postImages);
+router.delete("/images", deleteImage);
 
 module.exports = router;
