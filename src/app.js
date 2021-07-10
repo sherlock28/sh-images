@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
 
 // routes
 app.use("/api/v1", require("./routes"));
-// app.use(require("./middlewares").errors.notFound);
-// app.use(require("./middlewares").errors.handleError);
+app.use(require("./middlewares").errors.notfound);
+app.use(require("./middlewares").errors.handleErrors);
 
 module.exports = app;

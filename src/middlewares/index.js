@@ -1,4 +1,6 @@
 module.exports = {
-  notfound: require("./notfound"),
-  handleErrors: require("./handleErrors"),
+  errors: {
+    notfound: require("./errors/notfound"),
+    handleErrors: require("./errors/handleErrors"),
+  },
 };
