@@ -1,5 +1,4 @@
-const { cloudinary } = require("../config/cloudinary");
-// const { Product } = require("../../models");
+const { cloudinary } = require("../config");
 
 const deleteImage = async (req, res) => {
   try {
