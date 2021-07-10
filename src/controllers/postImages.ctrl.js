@@ -1,5 +1,6 @@
 const { cloudinary } = require("../config");
 const fs = require("fs-extra");
+const connection = require("../database/dbconnection")();
 
 const postProduct = async (req, res) => {
   try {

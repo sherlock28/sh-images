@@ -1,4 +1,5 @@
 const { cloudinary } = require("../config");
+const connection = require("../database/dbconnection")();
 
 const deleteImage = async (req, res) => {
   try {

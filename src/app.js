@@ -6,7 +6,6 @@ const multer = require("multer");
 
 // initializations
 const app = express();
-// require("./database");
 
 // settings
 app.set("port", process.env.PORT || 4000);

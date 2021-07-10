@@ -1,4 +1,4 @@
 module.exports = {
   cloudinary: require("./cloudinary.config"),
-  db: require("./db.config"),
+  db_config: require("./db.config"),
 };
