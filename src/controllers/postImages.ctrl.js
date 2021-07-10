@@ -19,9 +19,9 @@ const postImages = async (req, res) => {
     });
 
     const promisesStore = imagesSaved.map(image => {
-      const query = `INSERT INTO images (imageURL, public_id, ownerships_id) VALUES ('${
+      const query = `INSERT INTO ownerships_images (imageurl, public_id, inmueble_id) VALUES ('${
         image.imageURL
-      }','${image.publib_id}',${1})`;
+      }','${image.publib_id}',${5})`;
       return connection.query(query);
     });
     await Promise.all(promisesStore);

@@ -5,7 +5,7 @@ const deleteImage = async (req, res) => {
   try {
     const { public_id } = req.body;
 
-    const query = `DELETE FROM images WHERE public_id='${public_id}'`;
+    const query = `DELETE FROM ownerships_images WHERE public_id='${public_id}'`;
     await connection.query(query);
 
     await cloudinary.uploader.destroy(public_id);
