@@ -1,7 +1,9 @@
 const { cloudinary } = require("../config");
-const connection = require("../database/dbconnection");
+const { connect, disconnect } = require("../database/dbconnection");
 
 const deleteImage = async (req, res) => {
+  const connection = await connect();
+
   try {
     const { public_id } = req.body;
 
@@ -10,9 +12,12 @@ const deleteImage = async (req, res) => {
 
     await cloudinary.uploader.destroy(public_id);
 
+    disconnect(connection);
+
     res.json({ status: "Ok", message: "Image deleted successfully" });
   } catch (err) {
     console.error(err);
+    disconnect(connection);
     res.status(500).json({ status: "Error", message: "Internal server error" });
   }
 };
