@@ -10,7 +10,7 @@ CREATE TABLE ownerships_images
     imageURL VARCHAR (250) NOT NULL,
     public_id VARCHAR (100) NOT NULL,
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ownerships_id INT (11) NOT NULL,
+    inmueble_id INT (11) NOT NULL,
     PRIMARY KEY (id)
 );
 
