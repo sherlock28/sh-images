@@ -6,6 +6,7 @@ const postImages = async (req, res) => {
   const connection = await connect();
 
   try {
+    const { idHouse } = req.body;
     const images = req.files.map(file => file.path);
     console.log("uploading images...");
     const promisesSave = images.map(image => {
@@ -24,9 +25,7 @@ const postImages = async (req, res) => {
 
     console.log("saving to database...");
     const promisesStore = imagesSaved.map(image => {
-      const query = `INSERT INTO ownerships_images (imageurl, public_id, inmueble_id) VALUES ('${
-        image.imageURL
-      }','${image.publib_id}',${5})`;
+      const query = `INSERT INTO ownerships_images (imageurl, public_id, inmueble_id) VALUES ('${image.imageURL}','${image.publib_id}','${idHouse}')`;
       return connection.query(query);
     });
     await Promise.all(promisesStore);
