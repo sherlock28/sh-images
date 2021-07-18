@@ -19,19 +19,18 @@ const postImages = async (req, res) => {
     const response = await Promise.all(promisesSave);
     console.log("images uploaded");
 
+    const promisesRemove = images.map(image => fs.unlink(image));
+    await Promise.all(promisesRemove);
+
     const imagesSaved = response.map(res => {
       return { imageURL: res.secure_url, publib_id: res.public_id };
     });
-
     console.log("saving to database...");
     const promisesStore = imagesSaved.map(image => {
       const query = `INSERT INTO ownerships_images (imageurl, public_id, inmueble_id) VALUES ('${image.imageURL}','${image.publib_id}','${idHouse}')`;
       return connection.query(query);
     });
     await Promise.all(promisesStore);
-
-    const promisesRemove = images.map(image => fs.unlink(image));
-    await Promise.all(promisesRemove);
 
     disconnect(connection);
 
