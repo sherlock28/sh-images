@@ -12,7 +12,7 @@ const postImages = async (req, res) => {
     const promisesSave = images.map(image => {
       return cloudinary.uploader.upload(image, {
         resource_type: "image",
-        folder: "segundohogar/images",
+        folder: process.env.CLOUDINARY_FOLDER_IMAGES,
         overwrite: true,
       });
     });
