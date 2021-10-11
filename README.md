@@ -1,10 +1,10 @@
 # Pizzapp
 
-## Run using development variables
+### Run using development variables
 
 ```npm run dev```
 
-## Run using production variables
+### Run using production variables
 
 ```npm start```
 
