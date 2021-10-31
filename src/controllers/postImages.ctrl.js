@@ -4,9 +4,13 @@ const { connect, disconnect } = require("../database/dbconnection");
 
 const postImages = async (req, res) => {
   const connection = await connect();
+  const { idHouse } = req.body;
+  if(!idHouse) {
+    disconnect(connection);
+    res.status(400).json({ status: "Error", message: "idHouse required" });
+  }
 
   try {
-    const { idHouse } = req.body;
     const images = req.files.map(file => file.path);
     console.log("uploading images...");
     const promisesSave = images.map(image => {
