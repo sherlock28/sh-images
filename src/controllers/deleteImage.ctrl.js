@@ -6,6 +6,10 @@ const deleteImage = async (req, res) => {
 
   try {
     const { public_id } = req.body;
+    if(!public_id) {
+      disconnect(connection);
+      res.status(400).json({ status: "Error", message: "public_id required" });
+    }
 
     const query = `DELETE FROM ownerships_images WHERE public_id='${public_id}'`;
     await connection.query(query);
