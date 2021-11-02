@@ -32,7 +32,7 @@ const postImages = async (req, res) => {
     });
     console.log("saving to database...");
     imagestRepository
-      .saveImagesURL(imagesSaved, idHouse)
+      .saveImagesURL(connection, imagesSaved, idHouse)
       .then(() => {
         console.log("images saved");
         disconnect(connection);
