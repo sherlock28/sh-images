@@ -5,3 +5,8 @@ exports.saveImagesURL = async (connection, imagesURL, idHouse) => {
   });
   return await Promise.all(promisesStore);
 };
+
+exports.deleteImages = async (connection, public_id) => {
+  const query = `DELETE FROM ownerships_images WHERE public_id='${public_id}'`;
+  return await await connection.query(query);
+};
