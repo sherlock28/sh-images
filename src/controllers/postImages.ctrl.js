@@ -45,21 +45,22 @@ const postImages = async (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.name === "TimeoutError") {
-          res
-            .status(499)
-            .json({ status: "Error", message: "Request Timeout" });
-        } else {
-          res
-            .status(503)
-            .json({ status: "Error", message: "Error saving images" });
-        }
+        res
+          .status(503)
+          .json({ status: "Error", message: "Error saving images" });
       })
       .finally(() => disconnect(connection));
+      
   } catch (err) {
     console.log(err);
     disconnect(connection);
-    res.status(500).json({ status: "Error", message: "Internal server error" });
+    if (err.name === "TimeoutError") {
+      res.status(499).json({ status: "Error", message: "Request Timeout" });
+    } else {
+      res
+        .status(500)
+        .json({ status: "Error", message: "Internal server error" });
+    }
   }
 };
 
