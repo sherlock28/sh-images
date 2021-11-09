@@ -35,7 +35,6 @@ const postImages = async (req, res) => {
       .saveImagesURL(connection, imagesSaved, idHouse)
       .then(() => {
         console.log("images saved");
-        disconnect(connection);
         res.status(201).json({
           status: "OK",
           message: "Images saved successfully",
@@ -46,12 +45,11 @@ const postImages = async (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        disconnect(connection);
         res
           .status(503)
           .json({ status: "Error", message: "Error saving images" });
-      });
-
+      })
+      .finally(() => disconnect(connection));
   } catch (err) {
     console.log(err);
     disconnect(connection);
