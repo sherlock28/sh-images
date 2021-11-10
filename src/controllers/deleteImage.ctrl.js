@@ -1,12 +1,13 @@
 const { cloudinary } = require("../config");
 const { connect, disconnect } = require("../database/dbconnection");
-const imagestRepository = require("../repository/images.repo");
+const imagesRepository = require("../repository/images.repo");
 
 const deleteImage = async (req, res) => {
   const { public_id } = req.body;
+  let connection;
 
   try {
-    const connection = await connect();
+    connection = await connect();
     if (!public_id) {
       disconnect(connection);
       res.status(400).json({ status: "Error", message: "public_id required" });
@@ -17,8 +18,8 @@ const deleteImage = async (req, res) => {
     res.status(500).json({ status: "Error", message: "Internal server error" });
   }
 
-  imagestRepository
-    .deleteImage(connection, public_id)
+  imagesRepository
+    .deleteImages(connection, public_id)
     .then(async () => {
 
       try {
