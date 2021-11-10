@@ -1,7 +1,7 @@
 const { cloudinary } = require("../config");
 const fs = require("fs-extra");
 const { connect, disconnect } = require("../database/dbconnection");
-const imagestRepository = require("../repository/images.repo");
+const imagesRepository = require("../repository/images.repo");
 
 const postImages = async (req, res) => {
   const connection = await connect();
@@ -30,8 +30,9 @@ const postImages = async (req, res) => {
     const imagesSaved = response.map((res) => {
       return { imageURL: res.secure_url, publib_id: res.public_id };
     });
+    
     console.log("saving to database...");
-    imagestRepository
+    imagesRepository
       .saveImagesURL(connection, imagesSaved, idHouse)
       .then(() => {
         console.log("images saved");
@@ -50,7 +51,7 @@ const postImages = async (req, res) => {
           .json({ status: "Error", message: "Error saving images" });
       })
       .finally(() => disconnect(connection));
-      
+
   } catch (err) {
     console.log(err);
     disconnect(connection);
