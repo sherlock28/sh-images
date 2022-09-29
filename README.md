@@ -19,6 +19,8 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 CLOUDINARY_FOLDER=your_cloudinary_folder
 
+ENABLE_SAVE_MYSQL=false
+
 DB_DEV_HOST=localhost
 DB_DEV_DATABASE=your_database
 DB_DEV_DIALECT=mysql
