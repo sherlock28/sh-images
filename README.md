@@ -25,9 +25,12 @@ DB_DEV_DIALECT=mysql
 DB_DEV_USER=your_user
 DB_DEV_PASSWORD=your_password
 
-DB_PRO_HOST=your_production_host
-DB_PRO_DATABASE=your_production_database
+DB_PRO_HOST=<your_production_host>
+DB_PRO_DATABASE=<your_production_database>
 DB_PRO_DIALECT=mysql
-DB_PRO_USER=your_user_for_production
-DB_PRO_PASSWORD=your_password_for_production
+DB_PRO_USER=<your_user_for_production>
+DB_PRO_PASSWORD=<your_password_for_production>
+
+GRAPHQL_ENDPOINT=<api_url>
+X_HASURA_ADMIN_SECRET=<admin_secret_key>
 ```
