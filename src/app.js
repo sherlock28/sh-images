@@ -3,12 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
+const { env } = require("./config/env");
 
 // initializations
 const app = express();
 
 // settings
-app.set("port", process.env.PORT || 4000);
+app.set("port", env.PORT || 4000);
 
 // middlewares
 app.use(cors());
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 });
 app.use(multer({ storage }).any("images"));
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   app.use(require("morgan")("dev"));
 }
 

@@ -1,14 +1,19 @@
+const { env } = require("../config/env");
 const { cloudinary } = require("../config");
 const fs = require("fs-extra");
 const { connect, disconnect } = require("../database/dbconnection");
 const imagesRepository = require("../repository/images.repo");
+const { errors } = require("../middlewares");
 
 const postImages = async (req, res) => {
-  const connection = await connect();
+  const connection = null;
+  if (env.ENABLE_SAVE_MYSQL) connection = await connect();
+
   const { idHouse } = req.body;
+
   if (!idHouse) {
-    disconnect(connection);
-    res.status(400).json({ status: "Error", message: "idHouse required" });
+    if (env.ENABLE_SAVE_MYSQL) disconnect(connection);
+    return res.status(400).json({ data: null, success: false, message: "idHouse is required", error: "idHouse is missing" });
   }
 
   try {
@@ -17,7 +22,7 @@ const postImages = async (req, res) => {
     const promisesSave = images.map((image) => {
       return cloudinary.uploader.upload(image, {
         resource_type: "image",
-        folder: process.env.CLOUDINARY_FOLDER_IMAGES,
+        folder: env.CLOUDINARY_FOLDER_IMAGES,
         overwrite: true,
       });
     });
@@ -30,37 +35,35 @@ const postImages = async (req, res) => {
     const imagesSaved = response.map((res) => {
       return { imageURL: res.secure_url, publib_id: res.public_id };
     });
-    
+
     console.log("saving to database...");
-    imagesRepository
-      .saveImagesURL(connection, imagesSaved, idHouse)
-      .then(() => {
-        console.log("images saved");
-        res.status(201).json({
-          status: "OK",
-          message: "Images saved successfully",
-          data: {
-            images: "imagesSaved",
-          },
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        res
-          .status(503)
-          .json({ status: "Error", message: "Error saving images" });
-      })
-      .finally(() => disconnect(connection));
+    // #### deprecated ####
+    if (env.ENABLE_SAVE_MYSQL) {
+      imagesRepository
+        .saveImagesURL(connection, imagesSaved, idHouse)
+        .then(() => console.log("images saved successfully"))
+        .catch((err) => console.error(err))
+        .finally(() => disconnect(connection));
+    }
+    // ####################################
+
+    console.log("images saved successfully");
+    return res.status(201).json({
+      data: imagesSaved,
+      success: true,
+      message: "Images saved successfully",
+      error: null
+    });
 
   } catch (err) {
     console.log(err);
-    disconnect(connection);
+    if (env.ENABLE_SAVE_MYSQL) disconnect(connection);
     if (err.name === "TimeoutError") {
-      res.status(499).json({ status: "Error", message: "Request Timeout" });
+      return res.status(499).json({ data: null, success: false, message: "Request Timeout", error: errors.name });
     } else {
-      res
+      return res
         .status(500)
-        .json({ status: "Error", message: "Internal server error" });
+        .json({ data: null, success: false, message: "Internal server error", error: errors.name });
     }
   }
 };
