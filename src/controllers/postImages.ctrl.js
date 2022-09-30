@@ -4,6 +4,10 @@ const fs = require("fs-extra");
 const { connect, disconnect } = require("../database/dbconnection");
 const imagesRepository = require("../repository/images.repo");
 const { errors } = require("../middlewares");
+const { makeGqlRequest } = require("../client/makeGqlRequest"); 
+const { getVariables } = require("../client/getVariables"); 
+const { mutation } = require("../client/mutation"); 
+const { headers } = require("../client/headers"); 
 
 const postImages = async (req, res) => {
   const connection = null;
@@ -36,9 +40,9 @@ const postImages = async (req, res) => {
       return { imageURL: res.secure_url, publib_id: res.public_id };
     });
 
-    console.log("saving to database...");
     // #### deprecated ####
     if (env.ENABLE_SAVE_MYSQL) {
+      console.log("saving to mysql database...");
       imagesRepository
         .saveImagesURL(connection, imagesSaved, idHouse)
         .then(() => console.log("images saved successfully"))
@@ -46,6 +50,12 @@ const postImages = async (req, res) => {
         .finally(() => disconnect(connection));
     }
     // ####################################
+
+    console.log("saving to database...");
+    imagesSaved.forEach((image) => {
+      const data = makeGqlRequest({ mutation, variables: getVariables({ idHouse: idHouse, image: image }), headers });
+      console.log(data);
+    });
 
     console.log("images saved successfully");
     return res.status(201).json({
