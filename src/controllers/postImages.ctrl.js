@@ -53,8 +53,7 @@ const postImages = async (req, res) => {
 
     console.log("saving to database...");
     imagesSaved.forEach((image) => {
-      const data = makeGqlRequest({ mutation: AddImageMutation, variables: getVariables({ idHouse: idHouse, image: image }), headers });
-      console.log(data);
+      makeGqlRequest({ mutation: AddImageMutation, variables: getVariables({ idHouse: idHouse, image: image, method: "INSERT" }), headers });
     });
 
     console.log("images saved successfully");

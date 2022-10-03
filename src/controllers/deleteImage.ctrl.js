@@ -2,6 +2,10 @@ const { env } = require("../config/env");
 const { cloudinary } = require("../config");
 const { connect, disconnect } = require("../database/dbconnection");
 const imagesRepository = require("../repository/images.repo");
+const { makeGqlRequest } = require("../client/makeGqlRequest");
+const { getVariables } = require("../client/getVariables");
+const { DeleteImageMutation } = require("../client/mutation");
+const { headers } = require("../client/headers");
 
 const deleteImage = async (req, res) => {
   const { public_id } = req.body;
@@ -28,6 +32,10 @@ const deleteImage = async (req, res) => {
       .finally(() => disconnect(connection));
   }
   // ####################################
+
+  console.log("removing from database...");
+  let image = {}; image['publib_id'] = public_id;
+  makeGqlRequest({ mutation: DeleteImageMutation, variables: getVariables({ image , method: "DELETE" }), headers });
 
   try {
     await cloudinary.uploader.destroy(public_id, {
