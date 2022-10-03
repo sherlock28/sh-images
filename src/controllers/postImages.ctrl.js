@@ -6,7 +6,7 @@ const imagesRepository = require("../repository/images.repo");
 const { errors } = require("../middlewares");
 const { makeGqlRequest } = require("../client/makeGqlRequest"); 
 const { getVariables } = require("../client/getVariables"); 
-const { mutation } = require("../client/mutation"); 
+const { AddImageMutation } = require("../client/mutation"); 
 const { headers } = require("../client/headers"); 
 
 const postImages = async (req, res) => {
@@ -53,7 +53,7 @@ const postImages = async (req, res) => {
 
     console.log("saving to database...");
     imagesSaved.forEach((image) => {
-      const data = makeGqlRequest({ mutation, variables: getVariables({ idHouse: idHouse, image: image }), headers });
+      const data = makeGqlRequest({ mutation: AddImageMutation, variables: getVariables({ idHouse: idHouse, image: image }), headers });
       console.log(data);
     });
 
