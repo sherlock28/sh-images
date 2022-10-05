@@ -7,6 +7,7 @@ const { errors } = require("../middlewares");
 const { makeGqlRequest } = require("../client/makeGqlRequest"); 
 const { getVariables } = require("../client/getVariables"); 
 const { AddImageMutation } = require("../client/mutation"); 
+const { CheckOwnershipByIdQuery } = require("../client/queries"); 
 const { headers } = require("../client/headers"); 
 
 const postImages = async (req, res) => {
@@ -18,6 +19,12 @@ const postImages = async (req, res) => {
   if (!idHouse) {
     if (env.ENABLE_SAVE_MYSQL) disconnect(connection);
     return res.status(400).json({ data: null, success: false, message: "idHouse is required", error: "idHouse is missing" });
+  }
+
+  const data = await makeGqlRequest({ query: CheckOwnershipByIdQuery, variables: { id: +idHouse }, headers });
+
+  if (data.sh_ownerships.length === 0) {
+    return res.status(404).json({ data: null, success: false, message: "ownership id not found", error: "The ownership id does not exist" });
   }
 
   try {
