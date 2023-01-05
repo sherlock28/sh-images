@@ -23,9 +23,7 @@ const storage = multer.diskStorage({
 });
 app.use(multer({ storage }).any("images"));
 
-if (env.NODE_ENV === "development") {
-  app.use(require("morgan")("dev"));
-}
+app.use(require("morgan")("dev"));
 
 // routes
 app.use("/api/v1", require("./routes"));
