@@ -1,8 +1,19 @@
 version: "3.9"
 services:
-  sh-post-images: 
-    build: .
+  sh-images: 
+    build: 
+      context: .
+      target: prod
     ports:
-      - "4000:4000"
+      - "4100:4100"
     environment:
       - NODE_ENV=production
+    networks:
+      - default
+      - sh-network
+    external_links:
+      - hasura
+
+networks:
+  sh-network:
+    external: true

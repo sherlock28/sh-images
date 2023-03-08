@@ -1,13 +1,9 @@
-FROM node:16
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm ci
-
-COPY . .
-
-EXPOSE 80
-
-CMD [ "node", "src/index.js" ]
+FROM node:16-alpine as prod
+WORKDIR /usr
+COPY package.json ./
+COPY ./src ./
+COPY .env ./
+RUN npm install --only=production
+RUN npm install pm2 -g
+EXPOSE 4100
+CMD ["pm2-runtime","index.js"]
