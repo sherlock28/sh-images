@@ -1,23 +1,29 @@
 const { env } = require("../config/env");
-const { request } = require("graphql-request");
+const fetch = require("node-fetch");
 
 function makeGqlRequest({ query, mutation, variables, headers }) {
 
     if (mutation) {
-        return request({
-            url: env.GRAPHQL_ENDPOINT,
-            document: mutation,
-            variables: variables,
-            requestHeaders: headers,
-        }).then((data) => data);
+        return fetch(env.GRAPHQL_ENDPOINT, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+                query: mutation,
+                variables: variables,
+            })
+        }).then((response) => response.json())
+            .then((res) => res);
     }
 
-    return request({
-        url: env.GRAPHQL_ENDPOINT,
-        document: query,
-        variables: variables,
-        requestHeaders: headers,
-    }).then((data) => data);
+    return fetch(env.GRAPHQL_ENDPOINT, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+            query: query,
+            variables: variables,
+        })
+    }).then((response) => response.json())
+        .then((res) => res);
 
 }
 

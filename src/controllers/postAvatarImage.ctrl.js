@@ -16,9 +16,9 @@ const postImages = async (req, res) => {
     return res.status(400).json({ data: null, success: false, message: "userId is required", error: "userId is missing" });
   }
 
-  const data = await makeGqlRequest({ query: CheckUserByIdQuery, variables: { id: +userId }, headers });
+  const response = await makeGqlRequest({ query: CheckUserByIdQuery, variables: { id: +userId }, headers });
 
-  if (data.sh_users.length === 0) {
+  if (response?.data?.sh_users.length === 0) {
     return res.status(404).json({ data: null, success: false, message: "user id not found", error: "The user id does not exist" });
   }
 
