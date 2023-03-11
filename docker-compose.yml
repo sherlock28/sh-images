@@ -4,10 +4,14 @@ services:
     build: 
       context: .
       target: prod
+    container_name: sh-images
+    restart: always
     ports:
-      - "4100:4100"
+      - 4100:4100
     environment:
       - NODE_ENV=production
+    volumes:
+      - ./.env:/usr/.env
     networks:
       - default
       - sh-network
