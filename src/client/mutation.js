@@ -18,4 +18,16 @@ const DeleteImageMutation = gql`
     }
 `;
 
-module.exports = { AddImageMutation, DeleteImageMutation }; 
+const AddAvatarImageMutation = gql`
+    mutation AddAvatarImage($imageurl: String!, $user_id: Int!) {
+        update_sh_users_by_pk(pk_columns: { id: $user_id } 
+                              _set: { avatar: $imageurl }) 
+        {
+            id
+            username
+            avatar
+        }
+    }  
+`;
+
+module.exports = { AddImageMutation, DeleteImageMutation, AddAvatarImageMutation }; 
