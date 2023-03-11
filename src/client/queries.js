@@ -8,4 +8,12 @@ const CheckOwnershipByIdQuery = gql`
     }
 `;
 
-module.exports = { CheckOwnershipByIdQuery }; 
+const CheckUserByIdQuery = gql`
+    query CheckUserByIdQuery($id: Int) {
+        sh_users(where: {id: {_eq: $id}}) {
+            id
+        }
+    }
+`;
+
+module.exports = { CheckOwnershipByIdQuery, CheckUserByIdQuery }; 
