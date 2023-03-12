@@ -21,9 +21,9 @@ const postImages = async (req, res) => {
     return res.status(400).json({ data: null, success: false, message: "idHouse is required", error: "idHouse is missing" });
   }
 
-  const data = await makeGqlRequest({ query: CheckOwnershipByIdQuery, variables: { id: +idHouse }, headers });
-
-  if (data.sh_ownerships.length === 0) {
+  const response = await makeGqlRequest({ query: CheckOwnershipByIdQuery, variables: { id: +idHouse }, headers });
+  
+  if (response?.data?.sh_ownerships.length === 0) {
     return res.status(404).json({ data: null, success: false, message: "ownership id not found", error: "The ownership id does not exist" });
   }
 
