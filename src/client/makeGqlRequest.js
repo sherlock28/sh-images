@@ -1,30 +1,19 @@
 const { env } = require("../config/env");
 const fetch = require("node-fetch");
 
-function makeGqlRequest({ query, mutation, variables, headers }) {
+async function makeGqlRequest({ query, variables, headers }) {
 
-    if (mutation) {
-        return fetch(env.GRAPHQL_ENDPOINT, {
+    const response = await fetch(
+        env.GRAPHQL_ENDPOINT,
+        {
             method: "POST",
             headers: headers,
-            body: JSON.stringify({
-                query: mutation,
-                variables: variables,
-            })
-        }).then((response) => response.json())
-            .then((res) => res);
-    }
+            body: JSON.stringify({ query: query, variables: variables })
+        });
+    
+        const result = await response.json();
 
-    return fetch(env.GRAPHQL_ENDPOINT, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify({
-            query: query,
-            variables: variables,
-        })
-    }).then((response) => response.json())
-        .then((res) => res);
-
+        return result;
 }
 
 module.exports = { makeGqlRequest };

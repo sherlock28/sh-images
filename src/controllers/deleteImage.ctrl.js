@@ -35,7 +35,7 @@ const deleteImage = async (req, res) => {
 
   console.log("removing from database...");
   let image = {}; image['publib_id'] = public_id;
-  makeGqlRequest({ mutation: DeleteImageMutation, variables: getVariables({ image , method: "DELETE" }), headers });
+  makeGqlRequest({ query: DeleteImageMutation, variables: getVariables({ image , method: "DELETE" }), headers });
 
   try {
     await cloudinary.uploader.destroy(public_id, {

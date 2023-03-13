@@ -47,7 +47,7 @@ const postImages = async (req, res) => {
 
     console.log("saving to database...");
     avatarSaved.forEach((image) => {
-      makeGqlRequest({ mutation: AddAvatarImageMutation, variables: getAvatarMutationVars({ userId: userId, image: image }), headers });
+      makeGqlRequest({ query: AddAvatarImageMutation, variables: getAvatarMutationVars({ userId: userId, image: image }), headers });
     });
 
     console.log("avatar image saved successfully");
