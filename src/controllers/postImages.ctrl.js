@@ -1,8 +1,6 @@
 const { env } = require("../config/env");
 const { cloudinary } = require("../config");
 const fs = require("fs-extra");
-const { connect, disconnect } = require("../database/dbconnection");
-const imagesRepository = require("../repository/images.repo");
 const { errors } = require("../middlewares");
 const { makeGqlRequest } = require("../client/makeGqlRequest"); 
 const { getVariables } = require("../client/getVariables"); 
@@ -11,13 +9,10 @@ const { CheckOwnershipByIdQuery } = require("../client/queries");
 const { headers } = require("../client/headers"); 
 
 const postImages = async (req, res) => {
-  const connection = null;
-  if (env.ENABLE_SAVE_MYSQL) connection = await connect();
 
   const { idHouse } = req.body;
 
   if (!idHouse) {
-    if (env.ENABLE_SAVE_MYSQL) disconnect(connection);
     return res.status(400).json({ data: null, success: false, message: "idHouse is required", error: "idHouse is missing" });
   }
 
@@ -47,17 +42,6 @@ const postImages = async (req, res) => {
       return { imageURL: res.secure_url, publib_id: res.public_id };
     });
 
-    // #### deprecated ####
-    if (env.ENABLE_SAVE_MYSQL) {
-      console.log("saving to mysql database...");
-      imagesRepository
-        .saveImagesURL(connection, imagesSaved, idHouse)
-        .then(() => console.log("images saved successfully"))
-        .catch((err) => console.error(err))
-        .finally(() => disconnect(connection));
-    }
-    // ####################################
-
     console.log("saving to database...");
     imagesSaved.forEach((image) => {
       makeGqlRequest({ query: AddImageMutation, variables: getVariables({ idHouse: idHouse, image: image, method: "INSERT" }), headers });
@@ -73,7 +57,6 @@ const postImages = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    if (env.ENABLE_SAVE_MYSQL) disconnect(connection);
     if (err.name === "TimeoutError") {
       return res.status(499).json({ data: null, success: false, message: "Request Timeout", error: errors.name });
     } else {
